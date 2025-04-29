@@ -86,4 +86,21 @@ public class EmployeeController {
     public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
         return Result.success(employeeService.page(employeePageQueryDTO));
     }
+    @PostMapping("/status/{status}")
+    @ApiOperation(value = "员工状态修改接口")
+    public Result status(@PathVariable(value = "status") Integer status, Long id) {
+        employeeService.status(status, id);
+        return Result.success();
+    }
+    @GetMapping("/{id}")
+    @ApiOperation(value = "员工查询接口")
+    public Result<Employee> getById(@PathVariable(value = "id") Long id) {
+        return Result.success(employeeService.getById(id));
+    }
+    @PutMapping
+    @ApiOperation(value = "员工修改接口")
+    public Result update(@RequestBody EmployeeDTO employeeDTO) {
+        employeeService.update(employeeDTO);
+        return Result.success();
+    }
 }

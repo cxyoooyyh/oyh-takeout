@@ -7,6 +7,7 @@ import com.sky.result.Result;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -28,4 +29,11 @@ public interface EmployeeMapper {
     boolean save(Employee employee);
 
     Page<Employee> page(String name);
+
+    @Update("update employee set status=#{status} where id=#{id}")
+    void state(Integer status, Long id);
+
+    void update(Employee employee);
+
+    Employee getById(Long id);
 }
