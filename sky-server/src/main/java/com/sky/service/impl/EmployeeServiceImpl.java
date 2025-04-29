@@ -1,16 +1,21 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +26,7 @@ import org.springframework.util.DigestUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -80,6 +86,22 @@ public class EmployeeServiceImpl implements EmployeeService {
         boolean result = employeeMapper.save(employee);
         log.info("员工保存成功：{}", result);
         return result;
+    }
+
+    /**
+     * 分页查询员工
+     * @return
+     */
+    @Override
+    public PageResult page(EmployeePageQueryDTO employeePageQueryDTO) {
+        log.info("分页查询员工，页码：{}，页大小：{}，员工姓名：{}", employeePageQueryDTO.getPage(),
+                employeePageQueryDTO.getPageSize(), employeePageQueryDTO.getName());
+        PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+        Page<Employee> pageInfo = employeeMapper.page(employeePageQueryDTO.getName());
+        PageResult pageResult = new PageResult();
+        pageResult.setTotal(pageInfo.getTotal());
+        pageResult.setRecords(pageInfo.getResult());
+        return pageResult;
     }
 
 }

@@ -1,10 +1,14 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.sky.entity.Employee;
 import com.sky.result.Result;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface EmployeeMapper {
@@ -22,4 +26,6 @@ public interface EmployeeMapper {
             "#{status}," +
             "#{createTime},#{updateTime},#{createUser},#{updateUser})")
     boolean save(Employee employee);
+
+    Page<Employee> page(String name);
 }
