@@ -76,8 +76,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         BeanUtils.copyProperties( employeeDTO, employee);
         LocalDateTime now = LocalDateTime.now();
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
-        employee.setCreateTime(now);
-        employee.setUpdateTime(now);
+//        employee.setCreateTime(now);
+//        employee.setUpdateTime(now);
         employee.setStatus(1);
         Long currentId = BaseContext.getCurrentId();
         employee.setCreateUser(currentId);
