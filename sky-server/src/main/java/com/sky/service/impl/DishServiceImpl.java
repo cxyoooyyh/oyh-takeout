@@ -13,6 +13,7 @@ import com.sky.mapper.DishMapper;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
@@ -100,5 +101,33 @@ public class DishServiceImpl implements DishService {
         // 批量删除菜品数据
         dishMapper.deleteBatch(ids);
         dishFlavorMapper.deleteBatchByDishIds(ids);
+    }
+
+    @Override
+    public Result<DishVO> queryById(Long id) {
+        Dish dish = dishMapper.getById(id);
+        List<DishFlavor> dishFlavor = dishFlavorMapper.getById(id);
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish, dishVO);
+        dishVO.setFlavors(dishFlavor);
+        return Result.success(dishVO);
+    }
+    @Transactional
+    @Override
+    public void update(DishDTO dishDTO) {
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+        // 更新菜品数据
+        dishMapper.update(dish);
+        // 更新菜品口味数据
+        // 先删除后更新
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        Long dishId = dishDTO.getId();
+        if (flavors != null && !flavors.isEmpty()) {
+            //向口味表插入n条数据
+            flavors.forEach(flavor -> flavor.setDishId(dishId));
+            dishFlavorMapper.deleteByDishId(dishId);
+            dishFlavorMapper.saveBatch(flavors);
+        }
     }
 }

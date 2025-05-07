@@ -2,6 +2,7 @@ package com.sky.controller.admin;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.mapper.DishMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
@@ -26,6 +27,8 @@ import java.util.List;
 public class DishController {
     @Autowired
     private DishService dishService;
+    @Autowired
+    private DishMapper dishMapper;
 
     @PostMapping
     @ApiOperation("新增菜品接口")
@@ -47,6 +50,18 @@ public class DishController {
     public Result delete(@RequestParam List<Long> ids) {
         log.info("菜品批量删除 {}", ids);
         dishService.deleteBatch(ids);
+        return Result.success();
+    }
+    @GetMapping("/{id}")
+    @ApiOperation("菜品详情查询接口")
+    public Result<DishVO> queryById(@PathVariable(value = "id") Long id) {
+        return dishService.queryById(id);
+    }
+
+    @PutMapping
+    @ApiOperation("菜品修改接口")
+    public Result update(@RequestBody DishDTO dishDTO) {
+        dishService.update(dishDTO);
         return Result.success();
     }
 }
