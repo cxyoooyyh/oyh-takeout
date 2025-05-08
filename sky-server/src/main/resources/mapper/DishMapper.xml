@@ -55,6 +55,10 @@
         order by d.create_time desc
     </select>
 
+    <select id="list" resultType="com.sky.entity.Dish">
+        SELECT * FROM dish WHERE category_id = #{categoryId};
+    </select>
+
     <delete id="deleteBatch">
         DELETE FROM dish WHERE id IN
         <foreach collection="ids" item="id" open="(" separator="," close=")">
