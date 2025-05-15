@@ -32,6 +32,7 @@ public class ShopController {
     @PutMapping("/{status}")
     @ApiOperation("修改店铺状态接口")
     public Result updateStatus(@PathVariable Integer status) {
+        System.out.println(status);
         redisTemplate.opsForValue().set(SHOP_STATUS_KEY, status);
         return Result.success();
     }
