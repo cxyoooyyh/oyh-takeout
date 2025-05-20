@@ -2,6 +2,7 @@ package com.sky.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.sky.constant.MessageConstant;
+import com.sky.dto.DataOverViewQueryDTO;
 import com.sky.dto.UserLoginDTO;
 import com.sky.entity.User;
 import com.sky.exception.LoginFailedException;
@@ -55,5 +56,11 @@ public class UserServiceImpl implements UserService {
             userMapper.save(user);
         }
         return user;
+    }
+
+    // 通过日期查询用户数量
+    @Override
+    public int queryUserCount(DataOverViewQueryDTO queryDate) {
+        return userMapper.queryUserCount(queryDate);
     }
 }

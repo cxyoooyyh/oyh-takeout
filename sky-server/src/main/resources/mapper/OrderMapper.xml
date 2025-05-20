@@ -43,4 +43,15 @@
         </set>
         where id = #{id}
     </update>
+    <select id="queryTop10" resultType="com.sky.dto.GoodsSalesDTO">
+        SELECT ods.name as name, SUM(ods.number) as number FROM orders INNER JOIN
+        ( SELECT d.name as name, od.order_id as orderId,
+        od.number as number FROM order_detail od, dish d WHERE d.id = od.dish_id )
+        as ods
+        ON orders.id = ods.orderId
+        WHERE orders.order_time &gt; #{begin}
+        AND orders.order_time &lt; #{end}
+        AND orders.status = 5
+        group by name order by number desc limit 10 OFFSET 0 ;
+    </select>
 </mapper>
