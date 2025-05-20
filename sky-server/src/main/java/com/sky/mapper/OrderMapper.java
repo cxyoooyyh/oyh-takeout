@@ -4,6 +4,9 @@ import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * @author sharkCode
  * @date 2025/5/15 19:54
@@ -23,4 +26,7 @@ public interface OrderMapper {
      * @param orders
      */
     void update(Orders orders);
+    // 超时 15 分钟 未付款
+    @Select("SELECT * FROM orders WHERE status = #{pendingPayment} and delivery_time < #{overTime}")
+    List<Orders> queryByOrderTimeout(Integer pendingPayment, LocalDateTime overTime);
 }
